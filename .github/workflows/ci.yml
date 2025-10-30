@@ -87,7 +87,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       # check changes
-      - name: Check if context has changes
+      - name: Check changes
         run: |
           git fetch origin ${{ github.event.ref }} --depth=2
 
@@ -111,8 +111,8 @@ jobs:
             echo "CONTEXT_CHANGED=true" >> $GITHUB_ENV
             echo "DEBUG: CONTEXT_CHANGED set to true"
           fi
-      # skip unchanged
-      - name: Skip unchanged project
+      # skip unchange
+      - name: Skip unchange
         if: github.event.inputs.deploy != '1' && env.CONTEXT_CHANGED == 'false'
         run: |
           echo "No changes for ${{ matrix.BUILD_CONTEXT }}, exiting."

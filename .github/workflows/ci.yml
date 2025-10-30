@@ -92,17 +92,25 @@ jobs:
           git fetch origin ${{ github.event.ref }} --depth=2
 
           PREV_COMMIT=${{ github.event.before }}
+          echo "DEBUG: PREV_COMMIT initial = $PREV_COMMIT"
           if [ -z "$PREV_COMMIT" ] || [ "$PREV_COMMIT" = "0000000000000000000000000000000000000000" ]; then
             PREV_COMMIT="HEAD^"
+            echo "DEBUG: PREV_COMMIT fallback to HEAD^"
           fi
+          echo "DEBUG: Using PREV_COMMIT = $PREV_COMMIT"
 
-          IS_CONTEXT_CHANGED=$(git diff --name-only ${PREV_COMMIT} ${{ github.sha }} | grep -E "^${{ matrix.BUILD_CONTEXT }}(/|$)" || true)
+          IS_CONTEXT_CHANGED=$(git diff --name-only "$PREV_COMMIT" "${{ github.sha }}" | grep -E "^${{ matrix.BUILD_CONTEXT }}(/|$)" || true)
+          echo "DEBUG: Build context = ${{ matrix.BUILD_CONTEXT }}"
+          echo "DEBUG: Changed files matching context:"
+          echo "$IS_CONTEXT_CHANGED"
+
           if [ -z "$IS_CONTEXT_CHANGED" ]; then
             echo "CONTEXT_CHANGED=false" >> $GITHUB_ENV
+            echo "DEBUG: CONTEXT_CHANGED set to false"
           else
             echo "CONTEXT_CHANGED=true" >> $GITHUB_ENV
+            echo "DEBUG: CONTEXT_CHANGED set to true"
           fi
-
       # skip unchanged
       - name: Skip unchanged project
         if: github.event.inputs.deploy != '1' && env.CONTEXT_CHANGED == 'false'

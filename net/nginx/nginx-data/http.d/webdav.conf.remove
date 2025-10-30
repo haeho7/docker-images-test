@@ -1,0 +1,34 @@
+#
+# https://webdav.local.example.com
+#
+server {
+    listen 443 ssl;
+    listen 443 quic;
+    server_name webdav.local.example.com;
+
+    ssl_certificate /cert/local.example.com_ecc/fullchain.cer;
+    ssl_certificate_key /cert/local.example.com_ecc/local.example.com.key;
+    ssl_trusted_certificate /cert/local.example.com_ecc/fullchain.cer;
+
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    add_header Alt-Svc 'h3=":$server_port"; ma=86400' always;
+
+    location / {
+        proxy_pass http://192.168.1.31:8001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Early-Data $ssl_early_data;
+
+        # buffer
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_max_temp_file_size 0;
+
+        # upload
+        # External access needs to cancel the client_body_buffer_size parameter, otherwise nginx will crash due to excessive load. The reason is currently unknown.
+        client_max_body_size 0;
+        client_body_buffer_size 0;
+    }
+}

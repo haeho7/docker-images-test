@@ -1,0 +1,32 @@
+{
+    "servers": [
+        {
+            "server": "::",
+            "server_port": 1776,
+            "password": "${SHADOWSOCKS_PASSWORD_1}",
+            "method": "2022-blake3-chacha8-poly1305"
+        },
+        {
+            "server": "::",
+            "server_port": 1984,
+            "password": "${SHADOWSOCKS_PASSWORD_2}",
+            "method": "2022-blake3-aes-128-gcm"
+        },
+        {
+            "server": "::",
+            "server_port": 2077,
+            "password": "${SHADOWSOCKS_PASSWORD_3}",
+            "method": "aes-128-gcm",
+            "acl": "/etc/shadowsocks-rust/server.acl"
+        }
+    ],
+
+    "mode": "tcp_and_udp",
+    "timeout": 3600,
+    "udp_timeout": 300,
+    "keep_alive": 300,
+    "nofile": 1048576,
+    "no_delay": true,
+    "fast_open": true
+    //"dns": "udp://127.0.0.1:5353"
+}

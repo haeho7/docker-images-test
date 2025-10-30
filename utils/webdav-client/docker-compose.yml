@@ -1,0 +1,24 @@
+services:
+  webdav-client:
+    image: haeho7/docker-images:webdav-client
+    container_name: webdav-client
+    restart: unless-stopped
+    network_mode: host
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+      DAVFS2_ASK_AUTH: 0
+      WEBDRIVE_URL: 'http://localhost:5244/dav'
+      WEBDRIVE_USERNAME: example
+      WEBDRIVE_PASSWORD: 'example'
+    volumes:
+      - ./webdav-client-data:/mnt/webdrive:rshared

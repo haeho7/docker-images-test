@@ -1,0 +1,29 @@
+services:
+  nextcloud:
+    image: haeho7/docker-images:nextcloud
+    container_name: nextcloud
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+      MYSQL_HOST: '192.168.1.31:3306'
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: 'example'
+      REDIS_HOST: '192.168.1.31'
+      REDIS_HOST_PORT: 6379
+      REDIS_HOST_PASSWORD: 'example'
+      NEXTCLOUD_ADMIN_USER: example
+      NEXTCLOUD_ADMIN_PASSWORD: 'example'
+      NEXTCLOUD_TRUSTED_DOMAINS: '192.168.1.31 nextcloud.example.com nextcloud.local.example.com'
+      PHP_MEMORY_LIMIT: 1024M
+      PHP_UPLOAD_LIMIT: 0
+    volumes:
+      - ./nextcloud-data:/var/www/nextcloud
+      - /mnt/user/datas/nextcloud:/var/www/nextcloud/data

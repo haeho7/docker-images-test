@@ -1,0 +1,28 @@
+services:
+  embyserver:
+    image: haeho7/docker-images:embyserver-4.7.14.0
+    container_name: embyserver
+    restart: unless-stopped
+    network_mode: host
+    devices:
+      - /dev/dri:/dev/dri
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      UID: 99
+      GID: 100
+      GIDLIST: '100,18'
+    #ports:
+    #  - 8096:8096
+    #  - 8920:8920
+    #  - 1900:1900/udp
+    #  - 7359:7359/udp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./embyserver-data:/config
+      - /mnt/user/medias/moives/:/data/movies
+      - /mnt/user/medias/series/:/data/series
+      - /mnt/user/medias/tv/:/data/tv
+      - /mnt/user/medias/acg/:/data/acg

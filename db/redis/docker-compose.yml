@@ -1,0 +1,18 @@
+services:
+  redis:
+    image: haeho7/docker-images:redis
+    container_name: redis
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+    volumes:
+      - ./redis-data/conf:/etc/redis
+      - ./redis-data/data:/data
+    command: redis-server /etc/redis/redis.conf

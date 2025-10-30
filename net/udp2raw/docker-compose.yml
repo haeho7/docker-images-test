@@ -1,0 +1,52 @@
+services:
+  # server
+  udp2raw:
+    image: haeho7/docker-images:udp2raw
+    container_name: udp2raw
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    #depends_on:
+    #  - udp2raw-0
+    environment:
+      TZ: Asia/Taipei
+      USE_IPTABLES_NFT_BACKEND: 0
+    command: >
+      -s -l 0.0.0.0:1800 -r 127.0.0.1:1900
+      --raw-mode faketcp
+      --key password
+      --cipher-mode none
+      --auth-mode none
+      --auto-rule
+      #--dev eth0
+      --log-level 3
+      --mtu-warn 1375
+      --hb-mode 0
+      --wait-lock
+      --fix-gro
+
+  # client
+  udp2raw:
+    image: haeho7/docker-images:udp2raw
+    container_name: udp2raw
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    #depends_on:
+    #  - udp2raw-0
+    environment:
+      TZ: Asia/Taipei
+      USE_IPTABLES_NFT_BACKEND: 0
+    command: >
+      -c -l 127.0.0.1:1900 -r 11.22.33.44:1800
+      --raw-mode faketcp
+      --key password
+      --cipher-mode none
+      --auth-mode none
+      --auto-rule
+      #--dev eth0
+      --log-level 3
+      --mtu-warn 1375
+      --hb-mode 0
+      --wait-lock
+      --fix-gro

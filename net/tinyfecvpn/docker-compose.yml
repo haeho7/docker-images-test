@@ -1,0 +1,59 @@
+services:
+  # server
+  tinyfecvpn:
+    image: haeho7/docker-images:tinyfecvpn
+    container_name: tinyfecvpn
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    #depends_on:
+    #  - tinyfecvpn-0
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      USE_IPTABLES_NFT_BACKEND: 0
+    command: >
+      -s -l 0.0.0.0:1900
+      --mode 0
+      --key password
+      --tun-dev tinyfecvpn
+      --sub-net 10.1.10.0
+      --fec 10:6
+      --timeout 3
+      --log-level 3
+      --mssfix 0
+      --disable-obscure
+      --disable-checksum
+
+  # client
+  tinyfecvpn:
+    image: haeho7/docker-images:tinyfecvpn
+    container_name: tinyfecvpn
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    #depends_on:
+    #  - tinyfecvpn-0
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      USE_IPTABLES_NFT_BACKEND: 0
+    command: >
+      -c -r 11.22.33.44:1900
+      --mode 0
+      --key password
+      --keep-reconnect
+      --tun-dev tinyfecvpn
+      --sub-net 10.1.10.0
+      --fec 10:6
+      --timeout 3
+      --log-level 3
+      --mssfix 0
+      --disable-obscure
+      --disable-checksum

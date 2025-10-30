@@ -1,0 +1,31 @@
+services:
+  mariadb:
+    image: haeho7/docker-images:mariadb
+    container_name: mariadb
+    restart: unless-stopped
+    network_mode: host
+    security_opt:
+      - seccomp:unconfined
+    ulimits:
+      memlock: -1
+      nproc: -1
+      nofile:
+        soft: 1048576
+        hard: 1048576
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+      #MARIADB_DATABASE: example
+      #MARIADB_USER: example
+      #MARIADB_PASSWORD: 'example'
+      MARIADB_ROOT_HOST: '%'
+      MARIADB_ROOT_PASSWORD: 'example'
+    volumes:
+      - ./mariadb-data/init.d:/docker-entrypoint-initdb.d
+      - ./mariadb-data/conf.d:/etc/mysql/conf.d
+      - ./mariadb-data/data:/var/lib/mysql

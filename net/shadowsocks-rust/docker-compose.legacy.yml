@@ -1,0 +1,229 @@
+version: '3.9'
+
+services:
+  # ssserver-aes
+  ssserver-aes:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: ssserver-aes
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice server
+        --user nobody
+        --server-addr [::]:1984
+        --password password
+        --encrypt-method aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+        -U
+
+  # ssserver-2022-aes
+  ssserver-2022-aes:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: ssserver-2022-aes
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice server
+        --user nobody
+        --server-addr [::]:1984
+        --password password
+        --encrypt-method 2022-blake3-aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+        -U
+
+  # sssocks5
+  sssocks5:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: sssocks5
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice local
+        --user nobody
+        --local-addr [::]:1080
+        --server-addr 11.22.33.44:1984
+        --password password
+        --encrypt-method aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+        -U
+
+  # sshttp
+  sshttp:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: sshttp
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice local
+        --user nobody
+        --protocol http
+        --local-addr [::]:1111
+        --server-addr 11.22.33.44:1984
+        --password password
+        --encrypt-method aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+
+  # sstunnel
+  sstunnel:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: sstunnel
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice local
+        --user nobody
+        --protocol tunnel
+        --local-addr [::]:5300
+        --forward-addr 8.8.8.8:53
+        --server-addr 11.22.33.44:1984
+        --password password
+        --encrypt-method aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+        -U
+
+  # ssredir
+  ssredir:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: ssredir
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice local
+        --protocol redir
+        --local-addr [::]:1234
+        --server-addr 11.22.33.44:1984
+        --password password
+        --encrypt-method aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+        --tcp-redir tproxy
+        --udp-redir tproxy
+        -U
+
+  # ssredir-tcp
+  ssredir-tcp:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: ssredir-tcp
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice local
+        --protocol redir
+        --local-addr [::]:1234
+        --server-addr 11.22.33.44:1984
+        --password password
+        --encrypt-method aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+        --tcp-redir tproxy
+
+  # ssredir-udp
+  ssredir-udp:
+    image: pexcn/docker-images:shadowsocks-rust
+    container_name: ssredir-udp
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Sanghai
+      CHILLING_EFFECT: 0
+    command: >
+      ssservice local
+        --protocol redir
+        --local-addr [::]:1234
+        --server-addr 11.22.33.44:1984
+        --password password
+        --encrypt-method aes-128-gcm
+        --timeout 3600
+        --udp-timeout 300
+        --nofile 1048576
+        --tcp-keep-alive 300
+        --tcp-fast-open
+        --tcp-no-delay
+        --udp-redir tproxy
+        -u

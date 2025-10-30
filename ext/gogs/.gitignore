@@ -1,0 +1,2 @@
+gogs-data/*
+!gogs-data/gogs/conf

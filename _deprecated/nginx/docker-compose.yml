@@ -1,0 +1,16 @@
+services:
+  nginx:
+    image: nginx:1.22.1-alpine
+    container_name: nginx
+    network_mode: host
+    restart: unless-stopped
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+    volumes:
+      - ./nginx-data/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx-data/conf.d:/etc/nginx/conf.d
+      - /mnt/user/appdata/acme.sh/acme.sh-data:/cert

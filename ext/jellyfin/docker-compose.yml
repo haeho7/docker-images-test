@@ -1,0 +1,27 @@
+services:
+  jellyfin:
+    image: nyanmisaka/jellyfin:250217-amd64
+    container_name: jellyfin
+    restart: unless-stopped
+    network_mode: host
+    user: 99:100
+    devices:
+      - /dev/dri:/dev/dri
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      JELLYFIN_PublishedServerUrl: 192.168.1.31
+    #ports:
+    #  - 18096:8096
+    #  - 18920:8920
+    #  - 11900:1900/udp
+    #  - 17359:7359/udp
+    volumes:
+      - ./jellyfin-data:/config
+      - /mnt/user/medias/moives:/data/movies:ro
+      - /mnt/user/medias/series:/data/series:ro
+      - /mnt/user/medias/tv:/data/tv:ro
+      - /mnt/user/medias/acg:/data/acg:ro

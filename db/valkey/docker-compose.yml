@@ -1,0 +1,18 @@
+services:
+  valkey:
+    image: haeho7/docker-images:valkey
+    container_name: valkey
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+    volumes:
+      - ./valkey-data/conf:/etc/valkey
+      - ./valkey-data/data:/data
+    command: valkey-server /etc/valkey/valkey.conf

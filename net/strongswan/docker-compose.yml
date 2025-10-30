@@ -1,0 +1,18 @@
+services:
+  strongswan:
+    image: pexcn/docker-images:strongswan
+    container_name: strongswan
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      PSK: 'PreSharedKey'
+      USERS: 'user1:password1,user2:password2'
+      DEBUG: 0
+    #ports:
+    #  - 500:500/udp
+    #  - 4500:4500/udp

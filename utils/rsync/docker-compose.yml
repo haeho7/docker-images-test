@@ -1,0 +1,70 @@
+services:
+  rsync-daemon:
+    image: haeho7/docker-images:rsync
+    container_name: rsync-daemon
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    ulimits:
+      nproc: -1
+      nofile:
+        soft: 1048576
+        hard: 1048576
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      ENABLE_DAEMON: 1
+    volumes:
+      - ./rsync-data/conf/rsyncd.conf:/etc/rsync/rsyncd.conf
+      - ./rsync-data/conf/rsyncd.secrets:/etc/rsync/rsyncd.secrets
+      - /mnt/user:/mnt/user:ro
+
+  rsync-nas:
+    image: haeho7/docker-images:rsync
+    container_name: rsync-nas
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    ulimits:
+      nofile:
+        soft: 1048576
+        hard: 1048576
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      CRONTAB: '0 */12 * * * /opt/script/nas-backup.sh > /proc/1/fd/1'
+    volumes:
+      #- ./rsync-data/conf/rsyncd.conf:/etc/rsync/rsyncd.conf
+      #- ./rsync-data/conf/rsyncd.secrets:/etc/rsync/rsyncd.secrets
+      - ./rsync-data/data:/opt
+      - /mnt/user:/mnt/user:ro
+      - /mnt/cache_backup/backup/nas-data-backup:/mnt/cache_backup/backup/nas-data-backup
+
+  rsync-unraid:
+    image: haeho7/docker-images:rsync
+    container_name: rsync-unraid
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    ulimits:
+      nofile:
+        soft: 1048576
+        hard: 1048576
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      CRONTAB: '0 */12 * * * /opt/script/unraid-backup.sh > /proc/1/fd/1'
+    volumes:
+      #- ./rsync-data/conf/rsyncd.conf:/etc/rsync/rsyncd.conf
+      - ./rsync-data/conf/rsyncd.secrets:/etc/rsync/rsyncd.secrets
+      - ./rsync-data/data:/opt
+      - /mnt/cache_backup/backup/unraid-data-backup:/mnt/cache_backup/backup/unraid-data-backup

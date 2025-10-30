@@ -1,0 +1,17 @@
+services:
+  mdc:
+    image: vergilgao/mdc:6.6.6-r0
+    container_name: mdc
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+    volumes:
+      - ./mdc-data:/config
+      - /mnt/user/9kg/scan:/data

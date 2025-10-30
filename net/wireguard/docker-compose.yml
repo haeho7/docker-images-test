@@ -1,0 +1,17 @@
+services:
+  wireguard:
+    image: haeho7/docker-images:wireguard
+    container_name: wireguard
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      USE_IPTABLES_NFT_BACKEND: 0
+      PEER_RESOLVE_INTERVAL: 300
+    volumes:
+      - ./wireguard-data:/etc/wireguard

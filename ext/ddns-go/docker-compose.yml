@@ -1,0 +1,14 @@
+services:
+  ddns-go:
+    image: jeessy/ddns-go:v6.12.5
+    container_name: ddns-go
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+    volumes:
+      - ./ddns-go-data:/root

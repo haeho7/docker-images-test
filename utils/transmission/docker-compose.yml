@@ -1,0 +1,33 @@
+services:
+  transmission:
+    image: haeho7/docker-images:transmission
+    container_name: transmission
+    restart: unless-stopped
+    networks:
+       external-network:
+        ipv4_address: 192.168.1.39
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+      USER: example
+      PASS: 'example'
+      TRANSMISSION_WEB_HOME: '/transmission-web-control/'
+      WHITELIST: '127.0.0.1,192.168.1.*'
+      HOST_WHITELIST: '*.example.com'
+      PEERPORT: 51314
+    volumes:
+      - ./transmission-data:/config
+      - /mnt/user/torrent/watch:/watch
+      - /mnt/user/torrent/downloads:/downloads
+
+networks:
+   external-network:
+    name: external-network
+    external: true

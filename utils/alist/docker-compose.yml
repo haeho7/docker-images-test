@@ -1,0 +1,16 @@
+services:
+  alist:
+    image: haeho7/docker-images:alist
+    container_name: alist
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+    volumes:
+      - ./alist-data:/opt/alist/data

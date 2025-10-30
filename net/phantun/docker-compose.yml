@@ -1,0 +1,52 @@
+services:
+  # server
+  phantun:
+    image: haeho7/docker-images:phantun
+    container_name: phantun
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    #depends_on:
+    #  - phantun-0
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      USE_IPTABLES_NFT_BACKEND: 0
+      RUST_LOG: INFO
+    command: >
+      phantun-server
+        --local 1025
+        --remote 127.0.0.1:1025
+        --ipv4-only
+        --tun phantun
+        --tun-local 10.1.1.1
+        --tun-peer 10.1.1.2
+
+  # client
+  phantun:
+    image: haeho7/docker-images:phantun
+    container_name: phantun
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    #depends_on:
+    #  - phantun-0
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      USE_IPTABLES_NFT_BACKEND: 0
+      RUST_LOG: INFO
+    command: >
+      phantun-client
+        --local 127.0.0.1:1025
+        --remote 11.22.33.44:1025
+        --ipv4-only
+        --tun phantun
+        --tun-local 10.1.1.2
+        --tun-peer 10.1.1.1

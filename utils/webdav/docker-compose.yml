@@ -1,0 +1,20 @@
+services:
+  webdav:
+    image: haeho7/docker-images:webdav
+    container_name: webdav
+    restart: unless-stopped
+    network_mode: host
+    logging:
+      options:
+        max-file: 1
+        max-size: 20m
+    environment:
+      TZ: Asia/Taipei
+      PUID: 99
+      PGID: 100
+      USERNAME: example
+      PASSWORD: 'example'
+    volumes:
+      - ./webdav-data/conf:/etc/webdav
+      - ./webdav-data/data:/data
+    command: webdav -c /etc/webdav/config.yml

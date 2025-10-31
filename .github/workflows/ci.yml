@@ -17,12 +17,12 @@ on:
         description: 'Whether to deploy DockerHub and GHCR'
         required: true
         default: '0'
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build-and-push:
-    permissions:
-      contents: read
-      packages: write
     #if: "!contains(github.event.head_commit.message, 'do-not-build')"
     runs-on: ubuntu-24.04
     concurrency:

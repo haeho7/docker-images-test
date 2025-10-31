@@ -44,5 +44,5 @@ start_mariadb() {
   exec /usr/local/bin/docker-entrypoint.sh "$@"
 }
 
-echo "test-ci11"
+echo "test-ci"
 start_mariadb "$@"

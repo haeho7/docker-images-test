@@ -12,6 +12,8 @@ RUN apt-get update \
 
 COPY mariadb.sh /usr/local/bin/
 
+RUN echo "test-ci"
+
 VOLUME /var/lib/mysql
 WORKDIR /var/lib/mysql
 

@@ -10,6 +10,8 @@ RUN apk update \
   && apk add --no-cache tzdata shadow \
   && rm -rf /var/cache/apk/*
 
+RUN echo "test-ci"
+
 COPY redis.sh /usr/local/bin/
 
 VOLUME /data

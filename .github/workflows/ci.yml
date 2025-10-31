@@ -105,7 +105,7 @@ jobs:
           CHANGED_FILES=$(git diff --name-only "$PREVIOUS_COMMIT" "${{ github.sha }}" | grep -E "^${{ matrix.BUILD_CONTEXT }}(/|$)" || true)
           echo "DEBUG: Build context = ${{ matrix.BUILD_CONTEXT }}"
           echo "DEBUG: Changed files matching context:"
-          echo "DEBUG: $CHANGED_FILES"
+          echo "$CHANGED_FILES"
 
           if [ -z "$CHANGED_FILES" ]; then
             echo "CONTEXT_CHANGED=false" >> $GITHUB_ENV

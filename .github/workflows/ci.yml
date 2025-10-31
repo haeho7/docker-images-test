@@ -86,43 +86,39 @@ jobs:
       # prepare
       - name: Checkout
         uses: actions/checkout@v4
-      # check changes
-      - name: Check changes
+
+      # check change
+      - name: Check context change
         run: |
           git fetch origin ${{ github.event.ref }} --depth=2
 
-          PREV_COMMIT=${{ github.event.before }}
-          echo "DEBUG: PREV_COMMIT initial = $PREV_COMMIT"
+          PREVIOUS_COMMIT=${{ github.event.before }}
+          echo "DEBUG: PREVIOUS_COMMIT initial = $PREVIOUS_COMMIT"
 
-          if [ -z "$PREV_COMMIT" ] || [ "$PREV_COMMIT" = "0000000000000000000000000000000000000000" ]; then
-            PREV_COMMIT="HEAD^"
-            echo "DEBUG: PREV_COMMIT fallback to HEAD^"
+          if [ -z "$PREVIOUS_COMMIT" ] || [ "$PREVIOUS_COMMIT" = "0000000000000000000000000000000000000000" ]; then
+            PREVIOUS_COMMIT="HEAD^"
+            echo "DEBUG: PREVIOUS_COMMIT fallback to HEAD^"
           fi
-          echo "DEBUG: Using PREV_COMMIT = $PREV_COMMIT"
 
-          IS_CONTEXT_CHANGED=$(git diff --name-only "$PREV_COMMIT" "${{ github.sha }}" | grep -E "^${{ matrix.BUILD_CONTEXT }}(/|$)" || true)
+          echo "DEBUG: Using PREVIOUS_COMMIT = $PREVIOUS_COMMIT"
+
+          CHANGED_FILES=$(git diff --name-only "$PREVIOUS_COMMIT" "${{ github.sha }}" | grep -E "^${{ matrix.BUILD_CONTEXT }}(/|$)" || true)
           echo "DEBUG: Build context = ${{ matrix.BUILD_CONTEXT }}"
           echo "DEBUG: Changed files matching context:"
-          echo "$IS_CONTEXT_CHANGED"
+          echo "DEBUG: $CHANGED_FILES"
 
-          if [ -z "$IS_CONTEXT_CHANGED" ]; then
+          if [ -z "$CHANGED_FILES" ]; then
             echo "CONTEXT_CHANGED=false" >> $GITHUB_ENV
             echo "DEBUG: CONTEXT_CHANGED set to false"
           else
             echo "CONTEXT_CHANGED=true" >> $GITHUB_ENV
             echo "DEBUG: CONTEXT_CHANGED set to true"
           fi
-      # skip unchange
-      - name: Skip unchange
-        if: github.event.inputs.deploy != '1' && env.CONTEXT_CHANGED == 'false'
-        run: |
-          echo "No changes for ${{ matrix.BUILD_CONTEXT }}, exiting."
-          exit 0
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.TARGET_PLATFORMS }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Set environment variables

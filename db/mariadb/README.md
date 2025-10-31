@@ -58,3 +58,7 @@ lower_case_table_names = 2
 show variables;
 show global variables;
 ```
+
+```sh
+1111
+```

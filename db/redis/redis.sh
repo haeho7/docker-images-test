@@ -44,5 +44,5 @@ start_redis() {
   exec /usr/local/bin/docker-entrypoint.sh "$@"
 }
 
-echo "test-ci11"
+echo "test-ci111"
 start_redis "$@"

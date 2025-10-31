@@ -17,9 +17,10 @@ on:
         description: 'Whether to deploy DockerHub and GHCR'
         required: true
         default: '0'
+
 permissions:
-      contents: read
-      packages: write
+  contents: read
+  packages: write
 
 jobs:
   build-and-push:

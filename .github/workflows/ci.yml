@@ -155,7 +155,7 @@ jobs:
       # build & push
       - name: Build image and Push to Container Registries
         uses: docker/build-push-action@v5
-        if: ${{ github.event.inputs.deploy == '1' || (github.event_name == 'push' && env.CONTEXT_CHANGED == 'true') }}
+        if: ${{ (github.event_name == 'push' && env.CONTEXT_CHANGED == 'true') || github.event.inputs.deploy == '1' }}
         with:
           context: ${{ matrix.BUILD_CONTEXT }}
           tags: |

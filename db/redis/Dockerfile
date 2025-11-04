@@ -10,7 +10,7 @@ RUN apk update \
   && apk add --no-cache tzdata shadow \
   && rm -rf /var/cache/apk/*
 
-RUN echo "test-ci111111"
+RUN echo "test-ci1111111"
 
 COPY redis.sh /usr/local/bin/
 
